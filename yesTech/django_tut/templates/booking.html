@@ -1,0 +1,197 @@
+{% load static %}
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>Doctor Booking</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        .card { margin-top: 1rem; }
+        .specialty { font-size: .9rem; color: #666; }
+    </style>
+</head>
+<body>
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <div class="container">
+        <a class="navbar-brand" href="#">Clinic</a>
+    </div>
+</nav>
+
+<div class="container py-4">
+    <div class="row">
+        <div class="col-lg-7">
+            <div class="card shadow-sm">
+                <div class="card-body">
+                    <h5 class="card-title mb-3">Book an Appointment</h5>
+
+                    {% if messages %}
+                        {% for message in messages %}
+                            <div class="alert alert-{{ message.tags }} small" role="alert">{{ message }}</div>
+                        {% endfor %}
+                    {% endif %}
+
+                    {% if form %}
+                        <form method="post" novalidate>
+                            {% csrf_token %}
+                            {{ form.non_field_errors }}
+                            {% for field in form %}
+                                <div class="mb-3">
+                                    {{ field.label_tag }} 
+                                    {{ field }}
+                                    {% if field.help_text %}<div class="form-text">{{ field.help_text }}</div>{% endif %}
+                                    {% for err in field.errors %}<div class="text-danger small">{{ err }}</div>{% endfor %}
+                                </div>
+                            {% endfor %}
+                            <button class="btn btn-primary" type="submit">Confirm Booking</button>
+                        </form>
+                    {% else %}
+                        <form method="post" action="" id="bookingForm" novalidate>
+                            {% csrf_token %}
+                            <div class="mb-3">
+                                <label for="patient_name" class="form-label">Full name</label>
+                                <input type="text" class="form-control" id="patient_name" name="patient_name" required>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <label for="email" class="form-label">Email</label>
+                                    <input type="email" class="form-control" id="email" name="email" required>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label for="phone" class="form-label">Phone</label>
+                                    <input type="tel" class="form-control" id="phone" name="phone">
+                                </div>
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="doctor" class="form-label">Doctor</label>
+                                <select class="form-select" id="doctor" name="doctor_id" required>
+                                    <option value="" selected disabled>Choose a doctor</option>
+                                    {% if doctors %}
+                                        {% for doctor in doctors %}
+                                            <option value="{{ doctor.id }}" data-specialty="{{ doctor.specialty }}">{{ doctor.name }} — {{ doctor.specialty }}</option>
+                                        {% endfor %}
+                                    {% else %}
+                                        <option disabled>No doctors available</option>
+                                    {% endif %}
+                                </select>
+                                <div id="doctorSpecialty" class="specialty mt-1"></div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <label for="date" class="form-label">Date</label>
+                                    <input type="date" class="form-control" id="date" name="date" required>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label for="time" class="form-label">Time</label>
+                                    <input type="time" class="form-control" id="time" name="time" required>
+                                </div>
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="reason" class="form-label">Reason / Notes</label>
+                                <textarea class="form-control" id="reason" name="reason" rows="3"></textarea>
+                            </div>
+
+                            <button type="submit" class="btn btn-primary" id="submitBtn">Confirm Booking</button>
+                        </form>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-5">
+            <div class="card shadow-sm">
+                <div class="card-body">
+                    <h6 class="card-title mb-3">Available Doctors</h6>
+                    {% if doctors %}
+                        <ul class="list-group list-group-flush">
+                            {% for doctor in doctors %}
+                                <li class="list-group-item">
+                                    <div class="d-flex justify-content-between">
+                                        <div>
+                                            <strong>{{ doctor.name }}</strong><br>
+                                            <small class="text-muted">{{ doctor.specialty }}</small>
+                                        </div>
+                                        <div class="text-end">
+                                            <small class="text-muted">ID: {{ doctor.id }}</small>
+                                        </div>
+                                    </div>
+                                </li>
+                            {% endfor %}
+                        </ul>
+                    {% else %}
+                        <p class="small text-muted mb-0">No doctors to display.</p>
+                    {% endif %}
+                </div>
+            </div>
+
+            <div class="card shadow-sm mt-3">
+                <div class="card-body">
+                    <h6 class="card-title mb-3">Your Upcoming Appointments</h6>
+                    {% if appointments %}
+                        <div class="table-responsive">
+                            <table class="table table-sm">
+                                <thead>
+                                    <tr>
+                                        <th>Patient</th>
+                                        <th>Doctor</th>
+                                        <th>Date</th>
+                                        <th>Time</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for a in appointments %}
+                                        <tr>
+                                            <td>{{ a.patient_name }}</td>
+                                            <td>{{ a.doctor_name }}</td>
+                                            <td>{{ a.date }}</td>
+                                            <td>{{ a.time }}</td>
+                                        </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    {% else %}
+                        <p class="small text-muted mb-0">No upcoming appointments.</p>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    (function () {
+        const doctorSelect = document.getElementById('doctor');
+        const doctorSpecialty = document.getElementById('doctorSpecialty');
+        if (doctorSelect) {
+            doctorSelect.addEventListener('change', function () {
+                const opt = doctorSelect.selectedOptions[0];
+                doctorSpecialty.textContent = opt ? opt.dataset.specialty || '' : '';
+            });
+            // initialize if preselected
+            if (doctorSelect.selectedIndex > 0) {
+                const opt = doctorSelect.selectedOptions[0];
+                doctorSpecialty.textContent = opt.dataset.specialty || '';
+            }
+        }
+
+        // optional: simple client-side validation
+        const form = document.getElementById('bookingForm');
+        if (form) {
+            form.addEventListener('submit', function (e) {
+                if (!form.checkValidity()) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    form.classList.add('was-validated');
+                }
+            }, false);
+        }
+    })();
+</script>
+
+</body>
+</html>

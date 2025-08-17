@@ -1,0 +1,85 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>About - Website</title>
+    <link rel="icon" href="favicon.ico" />
+    <style>
+        :root { --max-width: 900px; --primary: #0366d6; --card-bg: #fff; --card-border: #eee; --text-dark: #111; }
+        body { margin: 0; font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial; color: var(--text-dark); background: #f7f7f7; }
+        .container { max-width: var(--max-width); margin: 0 auto; padding: 2rem; }
+        .hero { color: #fff; padding: 4rem 0; text-shadow: 0 1px 3px rgba(0,0,0,.6); background-position: center; background-size: cover; background-repeat: no-repeat; }
+        .lead { font-size: 1.125rem; margin-top: .5rem; }
+        .section { margin-top: 1.5rem; padding: 0.5rem 0; }
+        .team-grid { display: grid; grid-template-columns: repeat(auto-fit,minmax(200px,1fr)); gap: 1.5rem; margin-top: 1rem; }
+        .team-member { background: var(--card-bg); padding: 1rem; border: 1px solid var(--card-border); border-radius: 6px; text-align: center; }
+        .team-member img { border-radius: 50%; width: 160px; height: 160px; object-fit: cover; display: block; margin: 0 auto 0.75rem; }
+        .btn { display: inline-block; padding: .6rem 1rem; border-radius: 4px; text-decoration: none; }
+        .btn-primary { background: var(--primary); color: #fff; }
+        @media (prefers-color-scheme: dark) {
+            :root { --card-bg: #111; --card-border: #222; --text-dark: #ddd; }
+            body { background: #070707; }
+        }
+    </style>
+</head>
+<body>
+    <main class="about-page" role="main">
+        <header class="hero" style="background-image: url('images/about-hero.jpg');">
+            <div class="container">
+                <h1>About Our Company</h1>
+                <p class="lead">We build thoughtful products that solve real problems.</p>
+            </div>
+        </header>
+
+        <section class="container section section--mission" aria-labelledby="mission-heading">
+            <h2 id="mission-heading">Our Mission</h2>
+            <p>To deliver high-quality software and delightful experiences for our users.</p>
+        </section>
+
+        <section class="container section section--values" aria-labelledby="values-heading">
+            <h2 id="values-heading">Our Values</h2>
+            <ul>
+                <li>Customer-first thinking</li>
+                <li>Data-informed decisions</li>
+                <li>Respect and collaboration</li>
+                <li>Continuous learning</li>
+            </ul>
+        </section>
+
+        <section class="container section section--team" aria-labelledby="team-heading">
+            <h2 id="team-heading">Team</h2>
+
+            <div class="team-grid">
+                <!-- Replace with real team member cards -->
+                <article class="team-member" itemscope itemtype="http://schema.org/Person">
+                    <img src="images/person-placeholder.png" alt="Jane Doe photo" width="160" height="160" />
+                    <h3 itemprop="name">Jane Doe</h3>
+                    <p class="role" itemprop="jobTitle">Product Manager</p>
+                    <p class="bio" itemprop="description">Jane leads product strategy and ensures our users come first.</p>
+                </article>
+
+                <article class="team-member" itemscope itemtype="http://schema.org/Person">
+                    <img src="images/person-placeholder.png" alt="John Smith photo" width="160" height="160" />
+                    <h3 itemprop="name">John Smith</h3>
+                    <p class="role" itemprop="jobTitle">Lead Engineer</p>
+                    <p class="bio" itemprop="description">John architects scalable systems and mentors the engineering team.</p>
+                </article>
+
+                <article class="team-member" itemscope itemtype="http://schema.org/Person">
+                    <img src="images/person-placeholder.png" alt="Alex Lee photo" width="160" height="160" />
+                    <h3 itemprop="name">Alex Lee</h3>
+                    <p class="role" itemprop="jobTitle">Designer</p>
+                    <p class="bio" itemprop="description">Alex designs intuitive experiences across web and mobile.</p>
+                </article>
+            </div>
+        </section>
+
+        <section class="container section section--cta" aria-labelledby="cta-heading">
+            <h2 id="cta-heading">Want to work with us?</h2>
+            <p>Check out our open roles or get in touch.</p>
+            <p><a class="btn btn-primary" href="contact.html">Contact us</a></p>
+        </section>
+    </main>
+</body>
+</html>
