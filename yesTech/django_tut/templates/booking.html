@@ -1,33 +1,30 @@
-{% load static %}
-<!doctype html>
-<html lang="en">
-<head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width,initial-scale=1">
-    <title>Doctor Booking</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
-    <style>
-        .card { margin-top: 1rem; }
-        .specialty { font-size: .9rem; color: #666; }
-    </style>
-</head>
-<body>
-<nav class="navbar navbar-expand-lg navbar-light bg-light">
-    <div class="container">
-        <a class="navbar-brand" href="#">Clinic</a>
+{% extends "base.html" %}
+
+{% block title %}Booking Page{% endblock %}
+
+{% block content %}
+
+<nav class="bg-white shadow">
+    <div class="max-w-6xl mx-auto px-4">
+        <div class="flex items-center h-16">
+            <a class="text-xl font-semibold text-slate-800" href="#">Clinic</a>
+        </div>
     </div>
 </nav>
 
-<div class="container py-4">
-    <div class="row">
-        <div class="col-lg-7">
-            <div class="card shadow-sm">
-                <div class="card-body">
-                    <h5 class="card-title mb-3">Book an Appointment</h5>
+<div class="max-w-6xl mx-auto px-4 py-8">
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+        <div class="lg:col-span-7">
+            <div class="bg-white shadow-md rounded-lg overflow-hidden">
+                <div class="p-6">
+                    <h5 class="text-lg font-semibold text-slate-800 mb-4">Book an Appointment</h5>
 
                     {% if messages %}
                         {% for message in messages %}
-                            <div class="alert alert-{{ message.tags }} small" role="alert">{{ message }}</div>
+                            <div class="mb-3 p-3 rounded text-sm
+                                {% if 'error' in message.tags or 'danger' in message.tags %}bg-red-50 text-red-700{% elif 'warning' in message.tags %}bg-yellow-50 text-yellow-700{% else %}bg-green-50 text-green-700{% endif %}">
+                                {{ message }}
+                            </div>
                         {% endfor %}
                     {% endif %}
 
@@ -36,37 +33,37 @@
                             {% csrf_token %}
                             {{ form.non_field_errors }}
                             {% for field in form %}
-                                <div class="mb-3">
-                                    {{ field.label_tag }} 
+                                <div class="mb-4">
+                                    {{ field.label_tag }}
                                     {{ field }}
-                                    {% if field.help_text %}<div class="form-text">{{ field.help_text }}</div>{% endif %}
-                                    {% for err in field.errors %}<div class="text-danger small">{{ err }}</div>{% endfor %}
+                                    {% if field.help_text %}<p class="text-xs text-slate-500 mt-1">{{ field.help_text }}</p>{% endif %}
+                                    {% for err in field.errors %}<p class="text-xs text-red-600 mt-1">{{ err }}</p>{% endfor %}
                                 </div>
                             {% endfor %}
-                            <button class="btn btn-primary" type="submit">Confirm Booking</button>
+                            <button class="inline-flex items-center px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded" type="submit">Confirm Booking</button>
                         </form>
                     {% else %}
-                        <form method="post" action="" id="bookingForm" novalidate>
+                        <form method="post" action="" id="bookingForm" novalidate class="space-y-4">
                             {% csrf_token %}
-                            <div class="mb-3">
-                                <label for="patient_name" class="form-label">Full name</label>
-                                <input type="text" class="form-control" id="patient_name" name="patient_name" required>
+                            <div>
+                                <label for="patient_name" class="block text-sm font-medium text-slate-700">Full name</label>
+                                <input type="text" class="mt-1 block w-full border border-slate-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500" id="patient_name" name="patient_name" required>
                             </div>
 
-                            <div class="row">
-                                <div class="col-md-6 mb-3">
-                                    <label for="email" class="form-label">Email</label>
-                                    <input type="email" class="form-control" id="email" name="email" required>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <div>
+                                    <label for="email" class="block text-sm font-medium text-slate-700">Email</label>
+                                    <input type="email" class="mt-1 block w-full border border-slate-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500" id="email" name="email" required>
                                 </div>
-                                <div class="col-md-6 mb-3">
-                                    <label for="phone" class="form-label">Phone</label>
-                                    <input type="tel" class="form-control" id="phone" name="phone">
+                                <div>
+                                    <label for="phone" class="block text-sm font-medium text-slate-700">Phone</label>
+                                    <input type="tel" class="mt-1 block w-full border border-slate-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500" id="phone" name="phone">
                                 </div>
                             </div>
 
-                            <div class="mb-3">
-                                <label for="doctor" class="form-label">Doctor</label>
-                                <select class="form-select" id="doctor" name="doctor_id" required>
+                            <div>
+                                <label for="doctor" class="block text-sm font-medium text-slate-700">Doctor</label>
+                                <select id="doctor" name="doctor_id" required class="mt-1 block w-full border border-slate-300 rounded px-3 py-2 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500">
                                     <option value="" selected disabled>Choose a doctor</option>
                                     {% if doctors %}
                                         {% for doctor in doctors %}
@@ -76,86 +73,84 @@
                                         <option disabled>No doctors available</option>
                                     {% endif %}
                                 </select>
-                                <div id="doctorSpecialty" class="specialty mt-1"></div>
+                                <div id="doctorSpecialty" class="text-sm text-slate-500 mt-1"></div>
                             </div>
 
-                            <div class="row">
-                                <div class="col-md-6 mb-3">
-                                    <label for="date" class="form-label">Date</label>
-                                    <input type="date" class="form-control" id="date" name="date" required>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <div>
+                                    <label for="date" class="block text-sm font-medium text-slate-700">Date</label>
+                                    <input type="date" class="mt-1 block w-full border border-slate-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500" id="date" name="date" required>
                                 </div>
-                                <div class="col-md-6 mb-3">
-                                    <label for="time" class="form-label">Time</label>
-                                    <input type="time" class="form-control" id="time" name="time" required>
+                                <div>
+                                    <label for="time" class="block text-sm font-medium text-slate-700">Time</label>
+                                    <input type="time" class="mt-1 block w-full border border-slate-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500" id="time" name="time" required>
                                 </div>
                             </div>
 
-                            <div class="mb-3">
-                                <label for="reason" class="form-label">Reason / Notes</label>
-                                <textarea class="form-control" id="reason" name="reason" rows="3"></textarea>
+                            <div>
+                                <label for="reason" class="block text-sm font-medium text-slate-700">Reason / Notes</label>
+                                <textarea id="reason" name="reason" rows="3" class="mt-1 block w-full border border-slate-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"></textarea>
                             </div>
 
-                            <button type="submit" class="btn btn-primary" id="submitBtn">Confirm Booking</button>
+                            <div>
+                                <button type="submit" id="submitBtn" class="inline-flex items-center px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded">Confirm Booking</button>
+                            </div>
                         </form>
                     {% endif %}
                 </div>
             </div>
         </div>
 
-        <div class="col-lg-5">
-            <div class="card shadow-sm">
-                <div class="card-body">
-                    <h6 class="card-title mb-3">Available Doctors</h6>
+        <div class="lg:col-span-5 space-y-4">
+            <div class="bg-white shadow-md rounded-lg">
+                <div class="p-6">
+                    <h6 class="text-md font-semibold text-slate-800 mb-3">Available Doctors</h6>
                     {% if doctors %}
-                        <ul class="list-group list-group-flush">
+                        <ul class="divide-y divide-slate-100">
                             {% for doctor in doctors %}
-                                <li class="list-group-item">
-                                    <div class="d-flex justify-content-between">
-                                        <div>
-                                            <strong>{{ doctor.name }}</strong><br>
-                                            <small class="text-muted">{{ doctor.specialty }}</small>
-                                        </div>
-                                        <div class="text-end">
-                                            <small class="text-muted">ID: {{ doctor.id }}</small>
-                                        </div>
+                                <li class="py-3 flex justify-between items-center">
+                                    <div>
+                                        <div class="font-medium text-slate-800">{{ doctor.name }}</div>
+                                        <div class="text-sm text-slate-500">{{ doctor.specialty }}</div>
                                     </div>
+                                    <div class="text-sm text-slate-400">ID: {{ doctor.id }}</div>
                                 </li>
                             {% endfor %}
                         </ul>
                     {% else %}
-                        <p class="small text-muted mb-0">No doctors to display.</p>
+                        <p class="text-sm text-slate-500">No doctors to display.</p>
                     {% endif %}
                 </div>
             </div>
 
-            <div class="card shadow-sm mt-3">
-                <div class="card-body">
-                    <h6 class="card-title mb-3">Your Upcoming Appointments</h6>
+            <div class="bg-white shadow-md rounded-lg">
+                <div class="p-6">
+                    <h6 class="text-md font-semibold text-slate-800 mb-3">Your Upcoming Appointments</h6>
                     {% if appointments %}
-                        <div class="table-responsive">
-                            <table class="table table-sm">
+                        <div class="overflow-x-auto">
+                            <table class="w-full text-sm">
                                 <thead>
-                                    <tr>
-                                        <th>Patient</th>
-                                        <th>Doctor</th>
-                                        <th>Date</th>
-                                        <th>Time</th>
+                                    <tr class="text-left text-slate-500">
+                                        <th class="pb-2">Patient</th>
+                                        <th class="pb-2">Doctor</th>
+                                        <th class="pb-2">Date</th>
+                                        <th class="pb-2">Time</th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     {% for a in appointments %}
-                                        <tr>
-                                            <td>{{ a.patient_name }}</td>
-                                            <td>{{ a.doctor_name }}</td>
-                                            <td>{{ a.date }}</td>
-                                            <td>{{ a.time }}</td>
+                                        <tr class="border-t border-slate-100">
+                                            <td class="py-2">{{ a.patient_name }}</td>
+                                            <td class="py-2">{{ a.doctor_name }}</td>
+                                            <td class="py-2">{{ a.date }}</td>
+                                            <td class="py-2">{{ a.time }}</td>
                                         </tr>
                                     {% endfor %}
                                 </tbody>
                             </table>
                         </div>
                     {% else %}
-                        <p class="small text-muted mb-0">No upcoming appointments.</p>
+                        <p class="text-sm text-slate-500">No upcoming appointments.</p>
                     {% endif %}
                 </div>
             </div>
@@ -172,14 +167,12 @@
                 const opt = doctorSelect.selectedOptions[0];
                 doctorSpecialty.textContent = opt ? opt.dataset.specialty || '' : '';
             });
-            // initialize if preselected
             if (doctorSelect.selectedIndex > 0) {
                 const opt = doctorSelect.selectedOptions[0];
                 doctorSpecialty.textContent = opt.dataset.specialty || '';
             }
         }
 
-        // optional: simple client-side validation
         const form = document.getElementById('bookingForm');
         if (form) {
             form.addEventListener('submit', function (e) {
@@ -193,5 +186,4 @@
     })();
 </script>
 
-</body>
-</html>
+{% endblock %}
