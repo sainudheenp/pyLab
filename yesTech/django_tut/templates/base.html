@@ -1,137 +1,36 @@
 {% load static %}
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width,initial-scale=1" />
     <title>{% block title %}My Site{% endblock %}</title>
-
-    <!-- Tailwind CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
-
-    <!-- Optional: site favicon -->
-    {% comment %} <link rel="icon" href="{% static 'images/favicon.ico' %}" /> {% endcomment %}
-
     {% block extra_head %}{% endblock %}
 </head>
-<body class="min-h-screen flex flex-col bg-slate-50 text-slate-800">
 
-    <!-- NAVBAR -->
-    <header class="bg-white shadow-sm">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex justify-between items-center py-4">
-                <div class="flex items-center gap-3">
-                    <a href="{% url 'home' %}" class="flex items-center gap-2">
-                        <img src="{% static 'images/logo.svg' %}" alt="Logo" class="h-8 w-8 rounded-sm" />
-                        <span class="font-semibold text-lg tracking-tight">My Project</span>
-                    </a>
-                </div>
-
-                <!-- Desktop links -->
-                <nav class="hidden sm:flex items-center gap-6">
-                    <a href="{% url 'home' %}" class="text-slate-600 hover:text-slate-900">Home</a>
-                    <a href="{% url 'about' %}" class="text-slate-600 hover:text-slate-900">About</a>
-                    <a href="{% url 'pricing' %}" class="text-slate-600 hover:text-slate-900">Pricing</a>
-                    <a href="{% url 'contact' %}" class="text-slate-600 hover:text-slate-900">Contact</a>
-                </nav>
-
-                <!-- Auth / CTA -->
-                <div class="hidden sm:flex items-center gap-3">
-                    <a href="{% url 'login' %}" class="text-slate-600 hover:text-slate-900">Sign in</a>
-                    <a href="{% url 'signup' %}" class="inline-flex items-center px-4 py-2 bg-indigo-600 text-white rounded-md hover:bg-indigo-700">Get Started</a>
-                </div>
-
-                <!-- Mobile menu button -->
-                <div class="sm:hidden">
-                    <button id="mobile-menu-btn" aria-label="Toggle menu"
-                                    class="p-2 rounded-md text-slate-600 hover:bg-slate-100 focus:outline-none focus:ring-2 focus:ring-indigo-500">
-                        <svg id="menu-open-icon" xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none"
-                                 viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                        d="M4 6h16M4 12h16M4 18h16" />
-                        </svg>
-                        <svg id="menu-close-icon" xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 hidden" fill="none"
-                                 viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                        d="M6 18L18 6M6 6l12 12" />
-                        </svg>
-                    </button>
-                </div>
-            </div>
-        </div>
-
-        <!-- Mobile panel -->
-        <div id="mobile-menu" class="sm:hidden hidden border-t bg-white">
-            <div class="px-4 pt-4 pb-6 space-y-2">
-                <a href="{% url 'home' %}" class="block px-2 py-2 rounded hover:bg-slate-50">Home</a>
-                <a href="{% url 'about' %}" class="block px-2 py-2 rounded hover:bg-slate-50">About</a>
-                <a href="{% url 'pricing' %}" class="block px-2 py-2 rounded hover:bg-slate-50">Pricing</a>
-                <a href="{% url 'contact' %}" class="block px-2 py-2 rounded hover:bg-slate-50">Contact</a>
-                <div class="pt-2 border-t">
-                    <a href="{% url 'login' %}" class="block px-2 py-2 rounded hover:bg-slate-50">Sign in</a>
-                    <a href="{% url 'signup' %}" class="block mt-2 px-4 py-2 bg-indigo-600 text-white rounded text-center">Get Started</a>
-                </div>
-            </div>
-        </div>
-    </header>
-
-    <!-- MESSAGES -->
-    <main class="flex-1">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-6">
-            {% if messages %}
-                <div class="space-y-2">
-                    {% for message in messages %}
-                        <div class="rounded-md p-3 text-sm {% if message.tags %} {% if 'error' in message.tags %}bg-red-50 text-red-800{% elif 'warning' in message.tags %}bg-yellow-50 text-yellow-800{% else %}bg-green-50 text-green-800{% endif %} {% else %}bg-slate-50 text-slate-800{% endif %}">
-                            {{ message }}
-                        </div>
-                    {% endfor %}
-                </div>
-            {% endif %}
-        </div>
-
-        <!-- MAIN CONTENT AREA -->
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 my-8">
-            {% block content %}
-            <!-- Default content: a simple hero -->
-            <section class="rounded-lg bg-gradient-to-r from-white to-slate-50 border p-6">
-                <h1 class="text-3xl font-bold text-slate-900">Welcome</h1>
-                <p class="mt-2 text-slate-600">Use this base template and override blocks to build pages.</p>
-            </section>
-            {% endblock %}
-        </div>
+<body>
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 my-8">
+        {% block content %}
+        <section class="rounded-lg bg-gradient-to-r from-white to-slate-50 border p-6">
+            <h1 class="text-3xl font-bold text-slate-900">Welcome</h1>
+            <p class="mt-2 text-slate-600">Add your page content by overriding the content block.</p>
+        </section>
+        {% endblock %}
+    </div>
     </main>
 
-    <!-- FOOTER -->
     <footer class="bg-white border-t">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 flex flex-col sm:flex-row justify-between items-center gap-4">
+        <div
+            class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 flex flex-col sm:flex-row justify-between items-center gap-4">
             <div class="text-sm text-slate-600">© {% now "Y" %} My Project. All rights reserved.</div>
             <div class="flex items-center gap-4">
-                <a href="{% url 'privacy' %}" class="text-sm text-slate-600 hover:underline">Privacy</a>
-                <a href="{% url 'terms' %}" class="text-sm text-slate-600 hover:underline">Terms</a>
+              
             </div>
         </div>
     </footer>
 
-    {% block extra_scripts %}
-    <script>
-        // Mobile menu toggling
-        (function () {
-            const btn = document.getElementById('mobile-menu-btn');
-            const panel = document.getElementById('mobile-menu');
-            const openIcon = document.getElementById('menu-open-icon');
-            const closeIcon = document.getElementById('menu-close-icon');
-
-            if (!btn || !panel) return;
-
-            btn.addEventListener('click', () => {
-                const open = panel.classList.toggle('hidden');
-                // When panel is hidden, openIcon should show; when visible, show closeIcon
-                openIcon.classList.toggle('hidden');
-                closeIcon.classList.toggle('hidden');
-            });
-        })();
-    </script>
-    {% endblock %}
-
 </body>
+
 </html>
