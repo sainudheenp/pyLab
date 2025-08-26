@@ -94,6 +94,7 @@ USE_TZ = True
 
 # URL prefix for static files (CSS/JS/images)
 STATIC_URL = 'static/'
+STATIC_FILES=[]
 
 # Default primary key field type for models
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
